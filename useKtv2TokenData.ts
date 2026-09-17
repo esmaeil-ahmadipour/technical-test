@@ -75,7 +75,8 @@ export const useKtv2TokenData = ({ contractAddress, targetChainId, isChainSuppor
     address: contractAddress ?? undefined,
     abi: childContractABI,
     functionName: 'pool', // Address used as pair (Uni v2) or pool (Uni v3)
-
+    chainId: targetChainId,
+    query: baseQueryOptions,
   });
   const poolAddress = poolAddressData as Address | undefined;
 
@@ -95,7 +96,8 @@ export const useKtv2TokenData = ({ contractAddress, targetChainId, isChainSuppor
     chainId: targetChainId,
     query: baseQueryOptions,
   });
-  const isV2 = isV2Data as boolean;
+
+  const isV2 = isV2Data as boolean | undefined;
 
   // Read token price: v2 -> priceV2 (Uniswap v2), otherwise -> price (Uniswap v3)
   const {
@@ -109,7 +111,7 @@ export const useKtv2TokenData = ({ contractAddress, targetChainId, isChainSuppor
     args: poolAddress ? [poolAddress] : undefined,
     chainId: targetChainId,
     query: {
-      enabled: isV2 !== undefined && !!tpContractAddress && !!poolAddress && isChainSupported && !!targetChainId,
+      enabled: isV2 !== undefined && !!tpContractAddress && !!poolAddress,
     },
   });
   const ktv2TokenPriceInNative = ktv2TokenPriceInNativeData as bigint | undefined;
